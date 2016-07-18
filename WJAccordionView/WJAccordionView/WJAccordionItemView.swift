@@ -46,8 +46,20 @@ class WJAccordionItemView: UIView {
     var delegate: WJAccordionItemViewDelegate?
     
     var fold: Bool = true {
+        willSet {
+            if newValue {
+                for childView in detailView.subviews {
+                    childView.removeFromSuperview()
+                }
+                
+                detailView.snp_removeConstraints()
+                detailView.hidden = true
+            }
+        }
         didSet {
-            self.updateConstraints()
+            if fold != oldValue {
+                self.updateConstraints()
+            }
         }
     }
     
@@ -81,7 +93,6 @@ class WJAccordionItemView: UIView {
         super.updateConstraints()
         
         guard let ds = dataSource else { return }
-        
         snp_remakeConstraints { make in
             let index = ds.itemViewCurrentIndex(self)
             if index == 0 {
@@ -128,16 +139,6 @@ class WJAccordionItemView: UIView {
         fold = !fold
         guard let d = delegate else { return }
         d.itemViewDidFold(self, fold: fold)
-        if fold {
-            for childView in detailView.subviews {
-                childView.removeFromSuperview()
-            }
-            
-            detailView.snp_remakeConstraints { make in
-                make.edges.equalTo(self)
-            }
-            detailView.hidden = true
-        }
     }
 
 }

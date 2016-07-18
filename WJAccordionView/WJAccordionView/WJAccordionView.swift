@@ -95,6 +95,7 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
         } else {
             guard let otherItemViews = itemViews?.filter({ $0 != itemView }) else { return }
             for itemView in otherItemViews {
+                print("fold value \(itemView.fold)")
                 itemView.fold = true
             }
         }
