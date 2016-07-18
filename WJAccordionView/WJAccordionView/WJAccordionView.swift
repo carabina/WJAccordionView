@@ -115,8 +115,7 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
     // MARK: WJAccordionItemViewDelegate
     
     func itemViewDidFold(itemView: WJAccordionItemView, fold: Bool) {
-        if fold {
-        } else {
+        if !fold {
             guard let otherItemViews = itemViews?.filter({ $0 != itemView }) else { return }
             for itemView in otherItemViews {
                 itemView.fold = true
