@@ -12,7 +12,7 @@ import SnapKit
 @objc protocol WJAccordionViewDataSource {
     func numberOfItems() -> Int
     func titleForRowAtIndex(index: Int) -> String
-    func childViewForRowAtIndex(index: Int) -> UIView
+    func childViewForRowAtIndex(index: Int) -> UIView?
 }
 
 class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemViewDelegate {
@@ -33,7 +33,7 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
         // MARK: Debug
         backgroundColor = .blueColor()
     }
-
+    
     override init(frame: CGRect) {
         var width = frame.size.width
         var height = frame.size.height
@@ -81,12 +81,22 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
         return itemView
     }
     
+    func childViewForItemView(itemView: WJAccordionItemView) -> UIView? {
+        guard let ds = dataSource else { return nil }
+        guard let index = itemViews?.indexOf(itemView) else { return nil }
+        guard let childView = ds.childViewForRowAtIndex(index) else { return nil }
+        return childView
+    }
+    
     // MARK: WJAccordionItemViewDelegate
     
-    func foldOtherItemViews(itemView: WJAccordionItemView) {
-        guard let otherItemViews = itemViews?.filter({ $0 != itemView }) else { return }
-        for itemView in otherItemViews {
-            itemView.fold = true
+    func itemViewDidFold(itemView: WJAccordionItemView, fold: Bool) {
+        if fold {
+        } else {
+            guard let otherItemViews = itemViews?.filter({ $0 != itemView }) else { return }
+            for itemView in otherItemViews {
+                itemView.fold = true
+            }
         }
     }
 

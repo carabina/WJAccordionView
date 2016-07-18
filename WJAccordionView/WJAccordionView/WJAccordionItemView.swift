@@ -13,10 +13,11 @@ protocol WJAccordionItemViewDataSource {
     func itemViewsCount() -> Int
     func itemViewCurrentIndex(itemView: WJAccordionItemView) -> Int
     func itemViewAtIndex(index: Int) -> WJAccordionItemView?
+    func childViewForItemView(itemView: WJAccordionItemView) -> UIView?
 }
 
 protocol WJAccordionItemViewDelegate {
-    func foldOtherItemViews(itemView: WJAccordionItemView)
+    func itemViewDidFold(itemView: WJAccordionItemView, fold: Bool)
 }
 
 class WJAccordionItemView: UIView {
@@ -111,6 +112,12 @@ class WJAccordionItemView: UIView {
                     make.bottom.equalTo(self.snp_bottom).offset(-10)
                 }
                 self.detailView.hidden = false
+                
+                guard let childView = ds.childViewForItemView(self) else { return }
+                self.detailView.addSubview(childView)
+                childView.snp_remakeConstraints { make in
+                    make.edges.equalTo(self.detailView)
+                }
             }
         }
     }
@@ -120,9 +127,12 @@ class WJAccordionItemView: UIView {
     func handleTapGesture(gesture: UITapGestureRecognizer) {
         fold = !fold
         guard let d = delegate else { return }
-        if !fold {
-            d.foldOtherItemViews(self)
-        } else {
+        d.itemViewDidFold(self, fold: fold)
+        if fold {
+            for childView in detailView.subviews {
+                childView.removeFromSuperview()
+            }
+            
             detailView.snp_remakeConstraints { make in
                 make.edges.equalTo(self)
             }
