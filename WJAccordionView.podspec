@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "1.0"
   s.summary      = "Non scrollable iOS Accordion View"
   s.homepage     = "https://github.com/willyjl/WJAccordionView"
-  s.license      = { :type => "MIT" }
+  s.license      = { :type => "MIT", :file => "LICENSE.md" }
   s.author             = { "Willy Jansen" => "i@willyjansen.com" }
   s.social_media_url   = "http://twitter.com/willyjansen"
   s.platform     = :ios, '8.0'
