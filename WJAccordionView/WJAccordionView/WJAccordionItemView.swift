@@ -30,13 +30,17 @@ class WJAccordionItemView: UIView {
         return _titleLabel
     }()
     
+    lazy var accessoryView: UIImageView = {
+        let _accessoryView = UIImageView()
+        _accessoryView.userInteractionEnabled = true
+        _accessoryView.image = UIImage(named: "icon-folded")
+        return _accessoryView
+    }()
+    
     lazy var detailView: UIView = {
         let _detailView = UIView()
         _detailView.userInteractionEnabled = true
-        
-        // MARK: Debug
-        _detailView.backgroundColor = .orangeColor()
-        
+        _detailView.backgroundColor = .clearColor()
         return _detailView
     }()
     
@@ -60,6 +64,12 @@ class WJAccordionItemView: UIView {
             if fold != oldValue {
                 self.updateConstraints()
             }
+            
+            if fold {
+                accessoryView.image = UIImage(named: "icon-folded")
+            } else {
+                accessoryView.image = UIImage(named: "icon-expanded")
+            }
         }
     }
     
@@ -74,19 +84,23 @@ class WJAccordionItemView: UIView {
     }
     
     func commonInit() {
-        backgroundColor = .greenColor()
-        
         addSubview(titleLabel)
+        addSubview(accessoryView)
         addSubview(detailView)
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
-        titleLabel.addGestureRecognizer(tapGesture)
         
         titleLabel.snp_remakeConstraints { make in
             make.left.top.right.equalTo(self).inset(UIEdgeInsetsMake(0, 10, 0, 10))
             make.height.equalTo(self.rowHeight)
         }
         
+        accessoryView.snp_remakeConstraints { make in
+            make.right.equalTo(self)
+            make.centerY.equalTo(titleLabel)
+            make.width.height.equalTo(32.0)
+        }
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        titleLabel.addGestureRecognizer(tapGesture)
     }
     
     override func updateConstraints() {

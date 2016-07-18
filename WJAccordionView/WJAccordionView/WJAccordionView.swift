@@ -13,6 +13,14 @@ import SnapKit
     func numberOfItems() -> Int
     func titleForRowAtIndex(index: Int) -> String
     func childViewForRowAtIndex(index: Int) -> UIView?
+    
+    // MARK: Style
+    
+    func cornerRadiusForRowAtIndex(index: Int) -> CGFloat
+    func backgroundColorForRowAtIndex(index: Int) -> UIColor?
+    func titleFontForRowAtIndex(index: Int) -> UIFont?
+    func titleColorForRowAtIndex(index: Int) -> UIColor?
+    func accessoryColorForRowAtIndex(index: Int) -> UIColor?
 }
 
 class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemViewDelegate {
@@ -29,9 +37,7 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        // MARK: Debug
-        backgroundColor = .blueColor()
+        backgroundColor = .clearColor()
     }
     
     override init(frame: CGRect) {
@@ -54,13 +60,31 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
         
         for index in 0..<ds.numberOfItems() {
             let itemView = WJAccordionItemView()
+            itemView.translatesAutoresizingMaskIntoConstraints = false
             itemView.dataSource = self
             itemView.delegate = self
-            itemView.translatesAutoresizingMaskIntoConstraints = false
             
             self.addSubview(itemView)
             
             itemView.titleLabel.text = ds.titleForRowAtIndex(index)
+            
+            itemView.layer.cornerRadius = ds.cornerRadiusForRowAtIndex(index)
+            
+            if let backgroundColor = ds.backgroundColorForRowAtIndex(index) {
+                itemView.backgroundColor = backgroundColor
+            }
+            
+            if let font = ds.titleFontForRowAtIndex(index) {
+                itemView.titleLabel.font = font
+            }
+            
+            if let titleColor = ds.titleColorForRowAtIndex(index) {
+                itemView.titleLabel.textColor = titleColor
+            }
+            
+            if let accessoryColor = ds.accessoryColorForRowAtIndex(index) {
+                itemView.accessoryView.tintColor = accessoryColor
+            }
         }
     }
     
@@ -95,7 +119,6 @@ class WJAccordionView: UIView, WJAccordionItemViewDataSource, WJAccordionItemVie
         } else {
             guard let otherItemViews = itemViews?.filter({ $0 != itemView }) else { return }
             for itemView in otherItemViews {
-                print("fold value \(itemView.fold)")
                 itemView.fold = true
             }
         }

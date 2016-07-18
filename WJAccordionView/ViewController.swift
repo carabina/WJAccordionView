@@ -24,7 +24,13 @@ class ViewController: UIViewController, WJAccordionViewDataSource, UICollectionV
     }
     
     func titleForRowAtIndex(index: Int) -> String {
-        return "Abc"
+        if index == 0 {
+            return "Icons"
+        } else if index == 1 {
+            return "Background"
+        } else {
+            return "Text"
+        }
     }
     
     func childViewForRowAtIndex(index: Int) -> UIView? {
@@ -35,6 +41,26 @@ class ViewController: UIViewController, WJAccordionViewDataSource, UICollectionV
         } else {
             return compositeView!
         }
+    }
+    
+    func cornerRadiusForRowAtIndex(index: Int) -> CGFloat {
+        return 4.0
+    }
+    
+    func backgroundColorForRowAtIndex(index: Int) -> UIColor? {
+        return .lightGrayColor()
+    }
+    
+    func titleColorForRowAtIndex(index: Int) -> UIColor? {
+        return .yellowColor()
+    }
+    
+    func titleFontForRowAtIndex(index: Int) -> UIFont? {
+        return .boldSystemFontOfSize(18)
+    }
+    
+    func accessoryColorForRowAtIndex(index: Int) -> UIColor? {
+        return .darkGrayColor()
     }
     
     // MARK: UICollectionViewDataSource
