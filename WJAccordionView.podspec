@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.source       = { :git => "https://github.com/willyjl/WJAccordionView.git", :tag => "v#{s.version}" }
   s.source_files  = "WJAccordionView/WJAccordionView/*"
-  s.dependency "SnapKit", "~> 0.2.1"
+  s.dependency "SnapKit", "~> 0.21"
   s.frameworks = "UIKit"
   s.requires_arc = true
 end
